@@ -4,6 +4,7 @@ cimport hpdf
 include "hpdf_consts.pxi"
 include "units.pxi"
 from libc.math cimport cos, sin
+from libc.stdlib cimport malloc, free
 
 @cython.callspec("__cdecl")
 cdef void error_handler(long unsigned int error_no, long unsigned int detail_no, void *user_data):
@@ -43,6 +44,27 @@ cdef class Canvas(object):
 
     def save(self, str filename):
         hpdf.HPDF_SaveToFile(self._pdf, filename.encode('utf-8'))
+
+    def tobytes(self) -> bytes:
+        hpdf.HPDF_SaveToStream(self._pdf)
+        hpdf.HPDF_ResetStream(self._pdf)
+
+        cdef unsigned int n
+        cdef hpdf.HPDF_BYTE *buf = <hpdf.HPDF_BYTE *> malloc(4096)
+        cdef bytearray result = bytearray(0)
+
+        try:
+            while True:
+                n = 4096
+                hpdf.HPDF_ReadFromStream(self._pdf, buf, &n)
+                if n == 0:
+                    break
+
+                result += bytearray(buf[:n])
+
+            return bytes(result)
+        finally:
+            free(buf)
 
     def rect(self, float x, float y, float width, float height, int fill=False, int stroke=True):
         hpdf.HPDF_Page_Rectangle(self._page, x, y, width, height)
