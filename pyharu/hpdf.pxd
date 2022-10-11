@@ -173,6 +173,7 @@ cdef extern from "hpdf.h":
     HPDF_Image HPDF_LoadJpegImageFromFile (HPDF_Doc pdf, const char *filename)
     HPDF_Image HPDF_LoadRawImageFromFile (HPDF_Doc pdf, const char *filename, HPDF_UINT width, HPDF_UINT height, HPDF_ColorSpace color_space)
     HPDF_Image HPDF_LoadRawImageFromMem (HPDF_Doc pdf, const HPDF_BYTE *buf, HPDF_UINT width, HPDF_UINT height, HPDF_ColorSpace color_space, HPDF_UINT bits_per_component)
+    HPDF_Image HPDF_Image_LoadRaw1BitImageFromMem (HPDF_Doc pdf, const HPDF_BYTE *buf, HPDF_UINT width, HPDF_UINT height, HPDF_UINT stride, HPDF_BOOL black_is_1, HPDF_BOOL top_is_first)
     HPDF_Point HPDF_Image_GetSize (HPDF_Image image)
     HPDF_STATUS HPDF_Image_GetSize2 (HPDF_Image image, HPDF_Point *size)
     HPDF_UINT HPDF_Image_GetWidth (HPDF_Image image)
@@ -268,3 +269,4 @@ cdef extern from "hpdf.h":
     HPDF_STATUS HPDF_Page_TextOut (HPDF_Page page, HPDF_REAL xpos, HPDF_REAL ypos, const char *text)
     HPDF_STATUS HPDF_Page_SetTextMatrix (HPDF_Page page, HPDF_REAL a, HPDF_REAL b, HPDF_REAL c, HPDF_REAL d, HPDF_REAL x, HPDF_REAL y)
     HPDF_STATUS HPDF_Page_Concat (HPDF_Page page, HPDF_REAL a, HPDF_REAL b, HPDF_REAL c, HPDF_REAL d, HPDF_REAL x, HPDF_REAL y)
+    HPDF_STATUS HPDF_Page_DrawImage (HPDF_Page page, HPDF_Image image, HPDF_REAL x, HPDF_REAL y, HPDF_REAL w, HPDF_REAL h)

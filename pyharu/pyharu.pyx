@@ -39,6 +39,10 @@ cdef class Canvas(object):
             hpdf.HPDF_Page_TextOut(self._page, x, y, s)
         hpdf.HPDF_Page_EndText(self._page)
 
+    def drawRaw1BitImageFromMem(self, bytes mem, unsigned int width, unsigned int height, unsigned int stride, bint blackIs1, bint topIsFirst, float x, float y, float w, float h):
+        cdef void *img = hpdf.HPDF_Image_LoadRaw1BitImageFromMem(self._pdf, mem, width, height, stride, blackIs1, topIsFirst)
+        hpdf.HPDF_Page_DrawImage(self._page, img, x, y, w, h)
+
     def line(self, float x1, float y1, float x2, float y2):
         hpdf.HPDF_Page_MoveTo(self._page, x1, y1)
         hpdf.HPDF_Page_LineTo(self._page, x2, y2)
