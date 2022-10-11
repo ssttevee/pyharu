@@ -18,10 +18,12 @@ cdef class Canvas(object):
     cdef float _fontsize
     cdef float _rad
 
-    def __cinit__(self):
+    def __cinit__(self, float width, float height):
         self._pdf = hpdf.HPDF_New(&error_handler, NULL)
         hpdf.HPDF_SetCompressionMode(self._pdf, HPDF_COMP_ALL)
         self._page = hpdf.HPDF_AddPage(self._pdf)
+        hpdf.HPDF_Page_SetWidth(self._page, width)
+        hpdf.HPDF_Page_SetHeight(self._page, height)
         self._rad = 0
         self.setFont('Helvetica', 14)
 
