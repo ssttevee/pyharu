@@ -12,14 +12,12 @@ cdef void error_handler(long unsigned int error_no, long unsigned int detail_no,
 cdef class Canvas(object):
 
     cdef void *_pdf
-    cdef bytes _filename
     cdef void *_page
     cdef void *_font
     cdef float _fontsize
     cdef float _rad
 
-    def __cinit__(self, str filename):
-        self._filename = filename.encode('utf-8')
+    def __cinit__(self):
         self._pdf = hpdf.HPDF_New(&error_handler, NULL)
         hpdf.HPDF_SetCompressionMode(self._pdf, HPDF_COMP_ALL)
         self._page = hpdf.HPDF_AddPage(self._pdf)
@@ -43,9 +41,8 @@ cdef class Canvas(object):
         hpdf.HPDF_Page_LineTo(self._page, x2, y2)
         hpdf.HPDF_Page_Stroke(self._page)
 
-    def save(self):
-        hpdf.HPDF_SaveToFile(self._pdf, self._filename)
-        hpdf.HPDF_Free(self._pdf)
+    def save(self, str filename):
+        hpdf.HPDF_SaveToFile(self._pdf, filename.encode('utf-8'))
 
     def rect(self, float x, float y, float width, float height, int fill=False, int stroke=True):
         hpdf.HPDF_Page_Rectangle(self._page, x, y, width, height)
